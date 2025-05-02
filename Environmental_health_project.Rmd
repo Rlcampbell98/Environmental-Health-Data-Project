@@ -1,0 +1,58 @@
+---
+title: "Environmental health project"
+author: "Raven Campbell"
+date: "2025-05-02"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(corrplot)
+library(car)
+```
+
+
+```{r}
+data <- read.csv("Environmental_Health_Data.csv")
+```
+
+
+```{r}
+summary(data)
+```
+
+
+```{r}
+cor_matrix <- cor(data[,-1])
+corrplot(cor_matrix, method = "color", type = "upper", tl.cex = 0.8)
+```
+
+
+```{r}
+model <- lm(ChronicIllnessRate ~ AirQualityIndex + WaterContamination + MedianIncome + EducationLevel, data = data)
+summary(model)
+```
+
+
+
+```{r}
+par(mfrow = c(2, 2))
+plot(model)
+```
+
+
+
+```{r}
+ggplot(data, aes(x = AirQualityIndex, y = ChronicIllnessRate)) +
+  geom_point(color = "steelblue") +
+  geom_smooth(method = "lm", se = FALSE, color = "darkred") +
+  labs(title = "Chronic Illness vs Air Quality Index", x = "Air Quality Index", y = "Chronic Illness Rate")
+```
+
